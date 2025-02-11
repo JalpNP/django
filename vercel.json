@@ -2,14 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "ecommerce/main.py",
+      "src": "ecommerce/manage.py",
       "use": "@vercel/python"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "ecommerce/main.py"
+      "dest": "ecommerce/manage.py"
     }
   ]
 }
