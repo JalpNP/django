@@ -28,6 +28,31 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+#SMTP
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "genzclothing95@gmail.com"
+EMAIL_HOST_PASSWORD = "ovzw arla jdlc vbaf"
+
+
+
+
+#DATABASE
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'djongo',
+        'NAME': 'Ecomm',
+        'CLIENT': {
+            'host': 'mongodb+srv://jalp:jalp123@ecommerce.21qxd.mongodb.net/?retryWrites=true&w=majority&appName=Ecommerce'
+        }
+    }
+}
+
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -37,6 +62,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'ecommerce'
 ]
 
@@ -74,12 +100,7 @@ WSGI_APPLICATION = 'ecommerce.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+
 
 
 # Password validation
