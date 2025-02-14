@@ -1,28 +1,54 @@
-from django.core.mail import send_mail
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from .models import UserEmail
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse
+from pymongo import MongoClient
+from .forms import StudentForm
+from django.conf import settings
+from bson.objectid import ObjectId
 
-def home(request):
+client = MongoClient(settings.MONGO_URI)
+db = client[settings.MONGO_DB_NAME]
+collection = db["students"]
+
+def student_form(request):
     if request.method == "POST":
-        user_email = request.POST.get('email')
+        form = StudentForm(request.POST)
+        if form.is_valid():
+            student_data = {
+                "name": form.cleaned_data["name"],
+                "age": form.cleaned_data["age"],
+                "department": form.cleaned_data["department"],
+            }
+            collection.insert_one(student_data)
+            return redirect("student-list")
+    else:
+        form = StudentForm()
+    return render(request, "form.html", {"form": form})
 
-        if user_email:
-            # Save email to MongoDB
-            if not UserEmail.objects.filter(email=user_email).exists():
-                UserEmail.objects.create(email=user_email)
+def student_list(request):
+    students = list(collection.find({}))
+    for student in students:
+        student["id"] = str(student.pop("_id"))  # Rename _id to id
+    return render(request, "students_list.html", {"students": students})
 
-            # Send email
-            send_mail(
-                subject="Welcome to Our Platform!",
-                message=f"Hello, {user_email}. Thank you for registering.",
-                from_email="genzclothing95@gmail.com",
-                recipient_list=[user_email],
-            )
+def update_student(request, student_id):
+    student = collection.find_one({"_id": ObjectId(student_id)})
+    if not student:
+        return HttpResponse("Student not found", status=404)
 
-            messages.success(request, "Email sent and saved successfully!")
-            return redirect('home')
-        else:
-            messages.error(request, "Email is required!")
+    if request.method == "POST":
+        form = StudentForm(request.POST)
+        if form.is_valid():
+            updated_data = {
+                "name": form.cleaned_data["name"],
+                "age": form.cleaned_data["age"],
+                "department": form.cleaned_data["department"],
+            }
+            collection.update_one({"_id": ObjectId(student_id)}, {"$set": updated_data})
+            return redirect("student-list")
 
-    return render(request, 'home.html')
+    form = StudentForm(initial={"name": student["name"], "age": student["age"], "department": student["department"]})
+    return render(request, "form.html", {"form": form, "update": True})
+
+def delete_student(request, student_id):
+    collection.delete_one({"_id": ObjectId(student_id)})
+    return redirect("student-list")

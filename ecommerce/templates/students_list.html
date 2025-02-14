@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Lists</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .action-buttons a {
+            padding: 5px 10px;
+            text-decoration: none;
+            color: white;
+            border-radius: 5px;
+        }
+        .update-btn {
+            background-color: #4CAF50;
+        }
+        .delete-btn {
+            background-color: #f44336;
+        }
+    </style>
+</head>
+<body>
+    <h2>Student Lists</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Department</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+                <tr>
+                    <td>{{ student.name }}</td>
+                    <td>{{ student.age }}</td>
+                    <td>{{ student.department }}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <a href="{% url 'update-student' student.id %}" class="update-btn">Update</a>
+                            <a href="{% url 'delete-student' student.id %}" class="delete-btn" onclick="return confirm('Are you sure?')">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
