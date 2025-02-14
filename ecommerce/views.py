@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from pymongo import MongoClient
 from .forms import StudentForm
@@ -27,7 +27,7 @@ def student_form(request):
 def student_list(request):
     students = list(collection.find({}))
     for student in students:
-        student["id"] = str(student.pop("_id"))  # Rename _id to id
+        student["id"] = str(student.pop("_id"))
     return render(request, "students_list.html", {"students": students})
 
 def update_student(request, student_id):
