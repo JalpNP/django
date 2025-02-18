@@ -1,0 +1,16 @@
+{
+    "products": [
+        {
+            "id": 1,
+            "title": "Macbook",
+            "price": 1299,
+            "thumbnail": "https://m.media-amazon.com/images/I/61Qe0euJJZL._AC_UF1000,1000_QL80_.jpg"
+        },
+        {
+            "id": 2,
+            "title": "Oneplus Mobile",
+            "price": 200,
+            "thumbnail": "https://image01-in.oneplus.net/media/202406/19/dee6a15ca313f3a7b211f2a440e9f05e.png?x-amz-process=image/format,webp/quality,Q_80"
+        }
+    ]
+}
